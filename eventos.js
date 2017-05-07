@@ -47,9 +47,13 @@ var iniciaApp = function(){
 		}
 		ultimacolumna = $("#txtColumnas").val();
 		ultimorenglon = $("#txtRenglones").val();
-		iteracion(matriz);
+		Arbol={};
+		console.log(iteracion(matriz,Arbol));
 	}
-	function iteracion(matriz){
+	function iteracion(matriz,rama){
+		ultimacolumna = matriz[1].length-1;
+		ultimorenglon = matriz.length-1;
+		var eshoja=false;
 		var entriopiaGlobal = 0;
 		var columnaclase = new Array();
 		//Creación del arreglo de la última columna
@@ -60,46 +64,71 @@ var iniciaApp = function(){
  		var x = occurrence(columnaclase);
 		$.each(x, function( index, value ) {
 			if(value.length==ultimorenglon){
-				alert("¡Todos cumplen con la condición!");
+				eshoja=true;
+				var jsonHoja={"titulo":index,"valor":value.length+"/"+ultimorenglon};
+				return jsonHoja;
 			}else{
 				var y = value.length/ultimorenglon;
 				entriopiaGlobal = entriopiaGlobal - (y*(Math.log2(y)));
 			}
 		});
-
-		//Calculo por columnas
-		entriopiaColumnas = new Array();
-		entriopiaColumnas[0]=777;
-		//--Separación por columna
-		for(actual=1;actual<ultimacolumna;actual++){
-			var columna = new Array();
+		if(!eshoja){
+			//Calculo por columnas
+			entriopiaColumnas = new Array();
+			entriopiaColumnas[0]=777;
+			//--Separación por columna
+			for(actual=1;actual<ultimacolumna;actual++){
+				var columna = new Array();
+				for (j=1;j<=ultimorenglon;j++) {
+		 			columna[j] = matriz[j][actual];
+		 		}
+		 		var entriopiaColumna = 0;
+		 		var jsonColumna = occurrence(columna);
+				$.each(jsonColumna, function( index2, value2 ) {
+					//Separar por valores
+					var arrayNuevo = new Array();
+					$.each(value2, function( index3, value3 ) {
+						arrayNuevo[index3+1] = columnaclase[value3];
+					});
+					//Entriopia por valor
+					var entriopiaColumnaValor = 0;
+					var jsonColumnaValor = occurrence(arrayNuevo);
+					$.each(jsonColumnaValor, function( index4, value4 ) {
+						if(value4.length==value2.length){
+							entriopiaColumnaValor = entriopiaColumnaValor - 0;
+						}else{
+							var yz = value4.length/value2.length;
+							entriopiaColumnaValor = entriopiaColumnaValor - (yz*(Math.log2(yz)));
+						}
+					});
+					entriopiaColumna= entriopiaColumna + ((value2.length/ultimorenglon)*entriopiaColumnaValor);
+				});
+				entriopiaColumnas[actual] = entriopiaColumna;
+			}
+			
+			var indice=entriopiaColumnas.indexOf(Math.min.apply(Math, entriopiaColumnas));
+			rama["titulo"] = "Columna #"+indice;
+			var columnaGanadora = new Array();
 			for (j=1;j<=ultimorenglon;j++) {
-	 			columna[j] = matriz[j][actual];
-	 		}
-	 		var entriopiaColumna = 0;
-	 		var jsonColumna = occurrence(columna);
-			$.each(jsonColumna, function( index2, value2 ) {
-				//Separar por valores
-				var arrayNuevo = new Array();
-				$.each(value2, function( index3, value3 ) {
-					arrayNuevo[index3+1] = columnaclase[value3];
+		 		columnaGanadora[j] = matriz[j][indice];
+		 	}
+		 	var jsonColumnaGanadora = occurrence(columnaGanadora);
+		 	$.each(jsonColumnaGanadora, function( index4, value4 ) {
+				var matrizNueva=new Array();
+				$.each(value4, function( index5, value5 ) {
+					matrizNueva[index5+1]=new Array();
+					matrizNueva[index5+1][0]=777;
+					$.each(matriz[value5], function( index6, value6 ) {
+						if(index6!=indice){
+							matrizNueva[index5+1].push(value6);
+						}
+					});
 				});
-				//Entriopia por valor
-				var entriopiaColumnaValor = 0;
-				var jsonColumnaValor = occurrence(arrayNuevo);
-				$.each(jsonColumnaValor, function( index4, value4 ) {
-					if(value4.length==value2.length){
-						entriopiaColumnaValor = entriopiaColumnaValor - 0;
-					}else{
-						var yz = value4.length/value2.length;
-						entriopiaColumnaValor = entriopiaColumnaValor - (yz*(Math.log2(yz)));
-					}
-				});
-				entriopiaColumna= entriopiaColumna + ((value2.length/ultimorenglon)*entriopiaColumnaValor);
+				alert("Gana "+indice);
+				rama[index4]=iteracion(matrizNueva,{});
 			});
-			entriopiaColumnas[actual] = entriopiaColumna;
 		}
-		alert("Columna #"+entriopiaColumnas.indexOf(Math.min.apply(Math, entriopiaColumnas)));
+		return rama;
 	}
 	$("#btnConstruir").on("click",construir);
 	$("#btnArbol").on("click",capturar);
