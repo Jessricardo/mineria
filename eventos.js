@@ -54,6 +54,7 @@ var iniciaApp = function(){
 		ultimacolumna = matriz[1].length-1;
 		ultimorenglon = matriz.length-1;
 		var eshoja=false;
+		var jsonHoja;
 		var entriopiaGlobal = 0;
 		var columnaclase = new Array();
 		//Creación del arreglo de la última columna
@@ -65,8 +66,8 @@ var iniciaApp = function(){
 		$.each(x, function( index, value ) {
 			if(value.length==ultimorenglon){
 				eshoja=true;
-				var jsonHoja={"titulo":index,"valor":value.length+"/"+ultimorenglon};
-				return jsonHoja;
+				jsonHoja={"titulo":index,"valor":value.length+"/"+ultimorenglon};
+				return false;
 			}else{
 				var y = value.length/ultimorenglon;
 				entriopiaGlobal = entriopiaGlobal - (y*(Math.log2(y)));
@@ -117,16 +118,17 @@ var iniciaApp = function(){
 				var matrizNueva=new Array();
 				$.each(value4, function( index5, value5 ) {
 					matrizNueva[index5+1]=new Array();
-					matrizNueva[index5+1][0]=777;
 					$.each(matriz[value5], function( index6, value6 ) {
 						if(index6!=indice){
 							matrizNueva[index5+1].push(value6);
 						}
 					});
 				});
-				alert("Gana "+indice);
+				console.log(matrizNueva);
 				rama[index4]=iteracion(matrizNueva,{});
 			});
+		}else{
+			return jsonHoja;
 		}
 		return rama;
 	}
