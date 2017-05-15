@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+	<title>JSON Visualization</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="robots" content="index,follow">
+
+	<meta name="description" content="Simple, easy method to visually inspect a JSON-encoded string.">
+
+	<meta name="keywords" content="json,visualize,pretty print,developer tool">
+
+	<link rel="canonical" href="http://chris.photobooks.com/json/default.htm">
+
+	<link rel="stylesheet" type="text/css" href="JSON%20Visualization%20Archivos/reset-fonts.css">
+
+	<link rel="stylesheet" type="text/css" href="JSON%20Visualization%20Archivos/base.css">
+
+	<link rel="stylesheet" type="text/css" href="JSON%20Visualization%20Archivos/default.css">
+
+	<script type="text/javascript" async="" src="JSON%20Visualization%20Archivos/ga.js"></script><script type="text/javascript" src="JSON%20Visualization%20Archivos/yuiloader-dom-event.js"></script>
+
+	<script type="text/javascript" src="JSON%20Visualization%20Archivos/json-min.js"></script>
+
+	<script type="text/javascript" src="JSON%20Visualization%20Archivos/default-min.js"></script>
+
+</head>
+<body>
+
+	<h1>
+		<a href="http://www.json.org/" title="JavaScript Object Notation">JSON</a> Visualization
+	</h1>
+
+	<menu style="
+		margin: 0px 0px 1em 0px;
+		padding: 0px;
+		float: left;
+		width: 12em;">
+
+		<h3 style="margin-top: 0px;">Input</h3>
+
+		<p>
+			<label>
+				<input name="jsonParser" id="jsonStrict" value="1" checked="checked" type="radio"> Strict JSON
+			</label><br>
+
+			<label>
+				<input name="jsonParser" id="jsonEval" value="0" type="radio"> Eval
+			</label>
+		</p>
+
+		<h3>Output</h3>
+
+		<p id="jsonOutputSet">
+			<label>
+				<input name="jsonOutStyle" id="json2HTML" value="1" checked="checked" type="radio"> HTML
+			</label><br>
+
+			<label>
+				<input name="jsonOutStyle" id="json2JSON" value="0" type="radio"> JSON
+			</label>
+
+		</p>
+
+		<h3>Options:</h3>
+
+		<p id="jsonOptionSet" class="HTML">
+
+			<label id="jsonTrunc_label">
+				<input id="jsonTrunc" value="1" type="checkbox"> Truncate long strings
+			</label><br>
+
+			<label id="jsonDate_label">
+				<input id="jsonDate" value="1" type="checkbox"> Detect encoded dates
+			</label><br>
+
+			<label id="jsonData_label">
+				<input id="jsonData" value="1" type="checkbox"> Detect data structures
+			</label><br>
+
+			<label id="jsonSpace_label">
+				<input id="jsonSpace" value="1" type="checkbox">
+				Preserve whitespace
+			</label>
+		</p>
+
+		<h3>Actions:</h3>
+
+		<p>
+			<button id="cmdRender">Render</button><br>
+			<span id="loadCommands">
+				<a id="cmdLoad">Load</a>
+				<span id="reloadCommand" style="visibility: hidden;">
+					/ <a id="cmdReload">Reload</a>
+				</span>
+			</span>
+			<span id="loadMessage" style="display: none;">
+				Loading...
+			</span><br>
+			<a id="cmdValidate">Validate</a><br>
+			<a id="cmdClear">Clear</a><br>
+			<a id="cmdEncode">Re-encode</a><br>
+			<a id="cmdRemoveCRLF">Remove Line Breaks</a><br>
+			<a id="cmdDecodeURI">Decode URI</a><br>
+			<a id="cmdTrim2JSON">Trim non-JSON</a><br>
+			<span id="htmlCommands">
+				<a id="cmdCollapse">Collapse</a> /
+				<a id="cmdExpand">Expand</a> All<br>
+			</span>
+			<a id="cmdHelp" href="http://chris.photobooks.com/json/help.htm" target="help">Help</a><br>
+			<a id="cmdBeer" href="http://chris.photobooks.com/json/beer.htm" target="beer">Beer Fund</a>
+		</p>
+
+		<code id="jsonLocation"></code>
+
+	</menu>
+
+	<div style="padding-left: 13em;">
+		<h2 style="margin-top: 0px; font-size: 108%;">
+			<label for="jsonInput">Input:</label>
+			<small id="jsonSize">241 characters</small>
+		</h2>
+		<textarea id="jsonInput" rows="10" cols="50" placeholder="Paste your JSON here" spellcheck="false" autofocus="autofocus">{
+  "titulo": "Columna #3",
+  "f": {
+    "titulo": "Columna #2",
+    "f": {
+      "titulo": "n",
+      "valor": "6/6"
+    },
+    "t": {
+      "titulo": "y",
+      "valor": "3/3"
+    }
+  },
+  "t": {
+    "titulo": "y",
+    "valor": "6/6"
+  }
+}</textarea>
+
+		<h2 style="font-size: 108%;">Output:</h2>
+		<output style="display: block;" for="jsonInput cmdValidate" id="jsonValidateOutput"></output>
+		<output style="display: block;" for="jsonInput jsonStrict jsonEval json2HTML json2JSON jsonTrunc jsonDate jsonData jsonSpace" id="jsonOutput" class="HTML"><table id="p0" class="OBJ"><caption>[-] Object, 3 properties</caption><tbody><tr id="px1"><th>titulo</th><td><span id="p1" title="String" class="STRING">Columna #3</span></td></tr><tr id="px2"><th>f</th><td><table id="p2" class="OBJ"><caption>[-] Object, 3 properties</caption><tbody><tr id="px3"><th>titulo</th><td><span id="p3" title="String" class="STRING">Columna #2</span></td></tr><tr id="px4"><th>f</th><td><table id="p4" class="OBJ"><caption>[-] Object, 2 properties</caption><tbody><tr id="px5"><th>titulo</th><td><span id="p5" title="String" class="STRING">n</span></td></tr><tr id="px6"><th>valor</th><td><span id="p6" title="String" class="STRING">6/6</span></td></tr></tbody></table></td></tr><tr id="px7"><th>t</th><td><table id="p7" class="OBJ"><caption>[-] Object, 2 properties</caption><tbody><tr id="px8"><th>titulo</th><td><span id="p8" title="String" class="STRING">y</span></td></tr><tr id="px9"><th>valor</th><td><span id="p9" title="String" class="STRING">3/3</span></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr id="px10"><th>t</th><td><table id="p10" class="OBJ"><caption>[-] Object, 2 properties</caption><tbody><tr id="px11"><th>titulo</th><td><span id="p11" title="String" class="STRING">y</span></td></tr><tr id="px12"><th>valor</th><td><span id="p12" title="String" class="STRING">6/6</span></td></tr></tbody></table></td></tr></tbody></table></output>
+	</div>
+
+	<footer>
+		<address class="vcard" style="clear: both;">
+			<span class="fn">Chris Nielsen</span><br>
+			<a class="email" href="mailto:nielsen.chris@gmail.com">
+				nielsen.chris@gmail.com
+			</a>
+		</address>
+
+		<p>
+			<small><time pubdate="pubdate">2011-03-30</time>: Collapse /
+			Expand All functionality<br>
+			See also: <a href="http://chris.photobooks.com/regex/default.htm">Regular Expressions</a> and
+			<a href="http://chris.photobooks.com/xml/default.htm">XML Utilities</a></small>
+		</p>
+	</footer>
+
+
+	<script type="text/javascript">
+		if (
+			window.location.hostname.substring(0, 6).toLowerCase() !== 'local.'
+		) {
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-5037510-1']);
+			_gaq.push(['_trackPageview']);
+			_gaq.push(['_trackPageLoadTime']);
+
+			(function () {
+				var s, ga = document.createElement('script');
+				ga.type = 'text/javascript';
+				ga.async = true;
+				ga.src =
+					((document.location.protocol === 'https:') ?
+						'https://ssl' : 'http://www') +
+						'.google-analytics.com/ga.js';
+				s = document.getElementsByTagName('script')[0];
+				s.parentNode.insertBefore(ga, s);
+			}());
+		}
+	</script>
+
+<style>
+menu {
+    display: none;
+}
+h1 {
+    display: none;
+}
+footer {
+    display: none;
+}
+#jsonOutput {
+    margin: 0 auto;
+    width: 28%;
+}
+html {
+    color: #FCFFF5;
+    background-color: #5784bb;
+}
+</style>
+
+</body></html>

@@ -1,4 +1,22 @@
 var iniciaApp = function(){
+	eljson={
+  "titulo": "Columna #3",
+  "f": {
+    "titulo": "Columna #2",
+    "f": {
+      "titulo": "n",
+      "valor": "6/6"
+    },
+    "t": {
+      "titulo": "y",
+      "valor": "3/3"
+    }
+  },
+  "t": {
+    "titulo": "y",
+    "valor": "6/6"
+  }
+};
 	var occurrence = function (array) {
         "use strict";
         var result = {};
@@ -49,6 +67,15 @@ var iniciaApp = function(){
 		ultimorenglon = $("#txtRenglones").val();
 		Arbol={};
 		console.log(iteracion(matriz,Arbol));
+		$("section").fadeOut("fast",function(){
+			$("#framearbol").fadeIn("fast",function(){
+				var x = $("#framearbol").contents().find("#jsonInput");
+				x.val(JSON.stringify(Arbol));
+				var y = $("#framearbol").contents().find("#cmdRender");
+				y.click();
+			});	
+		});
+		
 	}
 	function iteracion(matriz,rama){
 		ultimacolumna = matriz[1].length-1;
