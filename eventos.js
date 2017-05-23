@@ -66,6 +66,7 @@ var iniciaApp = function(){
 		ultimacolumna = $("#txtColumnas").val();
 		ultimorenglon = $("#txtRenglones").val();
 		Arbol={};
+		contaItera = 1;
 		console.log(iteracion(matriz,Arbol));
 		$("section").fadeOut("fast",function(){
 			$("#framearbol").fadeIn("fast",function(){
@@ -98,6 +99,8 @@ var iniciaApp = function(){
 			}else{
 				var y = value.length/ultimorenglon;
 				entriopiaGlobal = entriopiaGlobal - (y*(Math.log2(y)));
+				alert("Iteracion "+contaItera+":"+entriopiaGlobal);
+				contaItera++;
 			}
 		});
 		if(!eshoja){
@@ -135,7 +138,7 @@ var iniciaApp = function(){
 			}
 			
 			var indice=entriopiaColumnas.indexOf(Math.min.apply(Math, entriopiaColumnas));
-			rama["titulo"] = "Columna #"+indice;
+			rama["titulo"] = "Columna #"+indice+" ("+entriopiaColumnas[indice]+")";
 			var columnaGanadora = new Array();
 			for (j=1;j<=ultimorenglon;j++) {
 		 		columnaGanadora[j] = matriz[j][indice];
